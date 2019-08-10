@@ -15,20 +15,20 @@ $("#add-train-btn").on("click", function () {
     event.preventDefault();
     let trainName = $("#train-name-input").val().trim();
     let destination = $("#destination-input").val().trim();
-    let startTime = moment($("#start-input").val().trim(), "HH:mm").subtract(1,"years").format("X");
+    let startTime = $("#start-input").val().trim();
     let freq = $("#frequency-input").val().trim();
-    console.log(trainName)
+    console.log(trainName)  
+
+
+    
+  
     console.log(startTime)
-
-
-
     let trainInfo = {
         name: trainName,
         destination: destination,
         start: startTime,
         frequency: freq
     };
-    console.log(trainInfo.name)
 
 
     database.ref().push(trainInfo);
@@ -45,16 +45,27 @@ database.ref().on("child_added", function(snapshot){
     console.log(snapshot);
     let trainName = snapshot.val().name;
     let destination=snapshot.val().destination;
-    let startTime= snapshot.val().startTime;
-    let frequency=snapshot.val().freq;
+    let startTime= snapshot.val().start;
+    let frequency=snapshot.val().frequency;
 
-    console.log(trainName)
+    let firstTime= moment(startTime,"HH:mm");
+    console.log(firstTime);
+    let currentTime = moment();
+    let minuteForArrival = currentTime.diff(firstTime, "minutes");
+    let remainder = minuteForArrival % frequency;
+    let arrivalOfNext= frequency - remainder;
+
+    let nextArrival = currentTime.add(arrivalOfNext, "minutes");
+    let ariveTime = nextArrival.format("HH:mm")
+
+    
 
     let tableInfo = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(destination),
-        $("<td>").text(startTime),
         $("<td>").text(frequency),
+        $("<td>").text(ariveTime),
+        $("<td>").text(arrivalOfNext),
     )
     $("#train-table").append(tableInfo);
 });
