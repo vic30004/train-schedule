@@ -1,4 +1,10 @@
-# train-schedule
+# Train-schedule
+An application that keeps track of train schedule. 
+
+# Live Link
+
+https://vic30004.github.io/train-schedule/
+
 
 # How it Works
 
